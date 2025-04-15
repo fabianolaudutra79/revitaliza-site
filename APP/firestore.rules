@@ -1,0 +1,48 @@
+{
+  "rules": {
+    "users": {
+      "$uid": {
+        ".read": "$uid === auth.uid || root.child('users').child($uid).child('settings').child('shareWithFamily').val() === true",
+        ".write": "$uid === auth.uid"
+      }
+    },
+    "trainings": {
+      ".read": "auth != null",
+      ".write": "auth != null && root.child('users').child(auth.uid).child('role').val() === 'admin'"
+    },
+    "scheduledTrainings": {
+      ".read": "auth != null",
+      "$trainingId": {
+        ".write": "auth != null && (data.child('userId').val() === auth.uid || !data.exists())"
+      }
+    },
+    "healthRecords": {
+      "$uid": {
+        ".read": "$uid === auth.uid || root.child('users').child($uid).child('settings').child('shareWithFamily').val() === true",
+        ".write": "$uid === auth.uid"
+      }
+    },
+    "reminders": {
+      "$uid": {
+        ".read": "$uid === auth.uid",
+        ".write": "$uid === auth.uid"
+      }
+    },
+    "supportMessages": {
+      "$messageId": {
+        ".read": "auth != null && (data.child('userId').val() === auth.uid || root.child('users').child(auth.uid).child('role').val() === 'admin')",
+        ".write": "auth != null && (data.child('userId').val() === auth.uid || !data.exists() || root.child('users').child(auth.uid).child('role').val() === 'admin')"
+      }
+    },
+    "faqs": {
+      ".read": "auth != null",
+      ".write": "auth != null && root.child('users').child(auth.uid).child('role').val() === 'admin'"
+    },
+    "videoAppointments": {
+      "$appointmentId": {
+        ".read": "auth != null && (data.child('userId').val() === auth.uid || data.child('professionalId').val() === auth.uid || root.child('users').child(auth.uid).child('role').val() === 'admin')",
+        ".write": "auth != null && (data.child('userId').val() === auth.uid || !data.exists() || data.child('professionalId').val() === auth.uid || root.child('users').child(auth.uid).child('role').val() === 'admin')"
+      }
+    }
+  }
+}

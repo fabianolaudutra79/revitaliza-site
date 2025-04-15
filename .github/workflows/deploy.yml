@@ -33,5 +33,5 @@ jobs:
           aws-region: us-west-2
       
       - name: Deploy to AWS S3
-        run: aws s3 sync ./ s3://revitaliza-site
+        run: aws s3 sync ./ s3://revitalizafitness
         
