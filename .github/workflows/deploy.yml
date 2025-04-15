@@ -1,0 +1,37 @@
+name: Revitaliza Deploy
+
+on:
+  push:
+    branches:
+      - master
+  
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+        
+    steps:
+      - name: Checkout the files
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ secrets.NODE_VERSION }}
+          
+
+      - name: Dependencies Install and Build
+        run: npm install && npm run build
+            
+      - name: Build Tailwind CSS
+        run: npm run build:css        
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-west-2
+      
+      - name: Deploy to AWS S3
+        run: aws s3 sync ./ s3://revitaliza-site
+        
